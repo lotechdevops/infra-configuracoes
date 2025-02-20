@@ -1,0 +1,15 @@
+- name: Instalação Prometheus
+  hosts: localhost
+  become: false
+  roles:
+    - prometheus
+  tags:
+    - prometheus
+
+- name: Instalação Grafana
+  hosts: localhost
+  become: false
+  roles:
+    - grafana
+  tags:
+    - grafana

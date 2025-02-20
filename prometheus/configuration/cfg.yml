@@ -1,0 +1,1 @@
+kubeconfig: "~/.kube/config_cluster_local"

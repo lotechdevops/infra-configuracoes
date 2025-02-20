@@ -1,0 +1,39 @@
+- name: Carregar configurações do arquivo cfg.yaml
+  ansible.builtin.include_vars:
+    file: ./configuration/cfg.yml
+
+- name: Definir caminho do kubeconfig
+  ansible.builtin.set_fact:
+    kubeconfig: "{{ lookup('env', 'HOME') }}/.kube/config_cluster_local"
+  delegate_to: localhost
+
+- name: Certificar-se de que o namespace existe
+  kubernetes.core.k8s:
+    kubeconfig: "{{ kubeconfig }}"
+    api_version: v1
+    kind: Namespace
+    name: observabilidade
+
+- name: Adicionar repositório Helm do Bitnami
+  command: helm repo add bitnami https://charts.bitnami.com/bitnami
+  register: helm_repo_add
+  changed_when: "'already exists' not in helm_repo_add.stdout"
+
+- name: Atualizar os repositórios Helm
+  command: helm repo update
+
+- name: Deploy Secret Password
+  kubernetes.core.k8s:
+    namespace: observabilidade
+    kubeconfig: "{{ kubeconfig }}"
+    state: present
+    definition: "{{ lookup('file', 'templates/secret-grafana.yaml') | from_yaml }}"
+
+- name: Deploy Grafana
+  community.kubernetes.helm:
+    name: grafana
+    chart_ref: bitnami/grafana
+    namespace: observabilidade
+    kubeconfig: "{{ kubeconfig }}"
+    state: present
+    values: "{{ lookup('file', 'templates/values.yaml') | from_yaml }}"
