@@ -8,7 +8,7 @@ Este repositório contém os scripts de provisionamento e configuração de ferr
 ```
 infra-configuracoes/
 ├── ansible.cfg                  # Arquivo de configuração do Ansible
-├── inventory/                   # Inventários para ambientes (aws e local)
+├── inventory/                   # Inventários para ambientes
 ├── main.yml                     # Playbook principal para execução centralizada
 │
 ├── bastion/                     # Configuração de host bastion (jump host)
@@ -43,18 +43,11 @@ infra-configuracoes/
 
 Automatizar a configuração de ambientes de infraestrutura, com foco em:
 
-- Clusters Kubernetes provisionados manualmente ou via EC2
+- Clusters Kubernetes provisionados em VMs Local ou via EC2
 - Monitoramento (Prometheus e Grafana)
 - Load balancing (HAProxy, MetalLB)
 - Armazenamento compartilhado (NFS)
 - Acesso seguro via bastion host
-
-## 📦 Inventários
-
-O repositório possui dois arquivos de inventário:
-
-- `inventory/aws/inv.yml` → Ambiente em nuvem
-- `inventory/local/inv.yml` → Ambiente local
 
 ## 🔧 Execução
 
